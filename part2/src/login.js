@@ -12,20 +12,34 @@ function authenticate(email, password) {
   }
 }
 
+async function checkEmail(email, lastLogin) {
+  const response = await fetch(`https://hackcheck.woventeams.com/api/v4/breachedaccount/${email}`);
+//   if (!response.ok) return [];
+  const data = await response.json();
+  
+  return data.filter(breach => !breach.IsSensitive && breach.DataClasses.includes("Passwords") && new Date(breach.AddedDate) > new Date(lastLogin));
+  
+}
 // The object returned from this function will be displayed in
 // a modal upon clicking submit on the login form.
 
 async function login(email, password) {
   const account = authenticate(email, password);
   if (account) {
+    const breaches = await checkEmail(email, account.lastLogin);
     // A new breach was detected!
-    if (sampleBreaches.length > 0) {
+    if (breaches.length > 0) {
       return {
         success: true,
         meta: {
           suggestPasswordChange: true,
           // hardcoded for now...
-          breachedAccounts: sampleBreaches
+          breachedAccounts: breaches.map(breach => ({
+            name: breach.Name,
+            domain: breach.domain,
+            breachDate: breach.breachDate,
+            addedDate: breach.addedDate,
+          }))
         }
       };
     } else {
