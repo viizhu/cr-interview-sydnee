@@ -1,0 +1,23 @@
+import { Auth } from '../../model.ts';
+import { BreachAccount } from '../../model.ts'
+
+<div *ngIf="Auth.compromisedAccount !== false">
+  [ngClass]="Auth?.compromisedAccount ? 'bg-yellow' : 'bg-white'">
+  <div>
+    <ng-template *ngIf="Auth?.compromisedAccount; else noBreaches">
+      <p>Your email was involved in a breach on the following sites:</p>
+      <ul>
+        <li *ngFor="let breach of Auth?.breachedAccounts">
+          <p>{{ breach.addedDate }} - {{ breach.name }}</p>
+        </li>
+      </ul>
+      <p>Although your information on our site is safe, we recommend you change your password in case your AppCo account shares a password with any of the sites above
+      </p>
+      <button>Change Password</button>
+      <button>Dismiss</button>
+    </ng-template>
+    <ng-template #noBreaches>
+      <p>No alerts</p>
+    </ng-template>
+  </div>
+</div>
