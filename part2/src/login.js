@@ -3,6 +3,44 @@ import {
   breaches as sampleBreaches,
 } from "./sample";
 
+// service
+ const checkIfBreached = async (email, password) => {
+    try {
+        const res = await fetch(`https://hackcheck.woventeams.com/api/v4/breachedaccount/${email}`, {
+            method: 'GET',
+            headers: {                
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({email, password})
+        })
+        console.log("rs", res.status)
+        if (res.status === 404) {
+          return {
+            success: true,
+            message: 'no breach found'
+          }
+        } else if (res.status === 200) {
+          return {
+            success: false,
+            message: 'breach found',
+//              meta: {
+      //          suggestPasswordChange: true,
+          //      breachedAccounts: [{
+        //        name: <Name>, //res.name
+        //        domain: <Domain>, // res.domain
+        //        breachDate: <BreachDate>, //res.breachDate
+      //          addedDate: <AddedDate> // res.addedDate
+          //      }]
+          }
+        } else {
+          throw new Error("Other unexpected error")
+        }
+   
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 function authenticate(email, password) {
   const account = sampleUsers.find(a => a.email === email);
   if (account && account.password === password) {
@@ -16,21 +54,11 @@ function authenticate(email, password) {
 // a modal upon clicking submit on the login form.
 
 async function login(email, password) {
+  console.log('ep', email, password)
   const account = authenticate(email, password);
+  console.log("a", account)
   if (account) {
-    // A new breach was detected!
-    if (sampleBreaches.length > 0) {
-      return {
-        success: true,
-        meta: {
-          suggestPasswordChange: true,
-          // hardcoded for now...
-          breachedAccounts: sampleBreaches
-        }
-      };
-    } else {
-      return { success: true };
-    }
+      checkIfBreached(email, password)
   } else {
     return {
       success: false,
@@ -38,5 +66,6 @@ async function login(email, password) {
     };
   }
 }
+
 
 export default login;
