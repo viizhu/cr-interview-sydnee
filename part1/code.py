@@ -1,9 +1,10 @@
-class CreateUserProfile
-  def self.before_create(email)
+from preloaded import *
+
+class CreateUserProfile:
+  @staticmethod
+  def before_create(email):
     profiles = SocialMediaProfiles.fetch_social_profiles(email)
 
     result = SocialMediaProfiles.save_profiles(profiles)
 
-    result['success']
-  end
-end
+    return result['success']
