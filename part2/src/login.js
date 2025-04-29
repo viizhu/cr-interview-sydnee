@@ -19,13 +19,23 @@ async function login(email, password) {
   const account = authenticate(email, password);
   if (account) {
     // A new breach was detected!
-    if (sampleBreaches.length > 0) {
+    // get account breaches
+    // will return [] and a 404 if account is not found and not breached
+    // will return an object array otherwise
+    const accountBreaches = await getBreaches(email);
+    
+
+    const validBreaches = accountBreaches.filter((breach) => { return !breach.IsSensitive && breach.DataClasses.includes("Passwords") && new Date(breach.AddedDate) > new Date(account.lastLogin)})
+    
+    if (validBreaches.length > 0) {
+      const formattedBreaches = validBreaches.map((breach) => {
+        return { name: breach.Name, domain: breach.Domain, breachDate: breach.BreachDate, addedDate: breach.AddedDate } });
+
       return {
         success: true,
         meta: {
           suggestPasswordChange: true,
-          // hardcoded for now...
-          breachedAccounts: sampleBreaches
+          breachedAccounts: formattedBreaches
         }
       };
     } else {
@@ -37,6 +47,20 @@ async function login(email, password) {
       message: "The username or password you entered is invalid."
     };
   }
+}
+
+async function getBreaches(email){
+  const response = await fetch(`https://hackcheck.woventeams.com/api/v4/breachedaccount/${email}`) 
+  
+  if(!response.ok){
+    if(response.status !== 404){
+          throw new Error(`Error fetching account ${response.status}`)
+    }else{
+      return []
+    }
+  }
+  const breachData = await response.json();
+  return breachData;
 }
 
 export default login;
