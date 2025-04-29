@@ -1,0 +1,21 @@
+<div class="card" *ngIf="metaData?.breachedAccounts?.length > 0">
+  <div><h1>Your email was involved in a breach on the following sites:</h1>
+
+    <span></span>
+  <span>
+      Although your information on our site is safe, we
+      recommend you change your password in case your AppCo
+      account shares a password with any of the sites above.
+    </span>
+    <div>
+      <button>Change Password<button>
+       <button>Dismiss</button>
+    </div>
+  </div>
+</div>
+<div  class="card" *ngIf="metaData?.breachedAccounts?.length == 0">
+  <span>No alerts</span>
+</div>
+    
+    
+

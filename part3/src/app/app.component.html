@@ -25,6 +25,6 @@
   <div class="container">
     <LoginForm (onLoginSuccess)="onLoginSuccess($event)" *ngIf="!auth?.token">
     </LoginForm>
-    <Dashboard *ngIf="auth?.token"></Dashboard>
+    <Dashboard *ngIf="auth?.token" data="auth?.meta"></Dashboard>
   </div>
 </div>
