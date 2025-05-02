@@ -18,7 +18,7 @@ function authenticate(email, password) {
 async function login(email, password) {
   const account = authenticate(email, password);
   if (account) {
-    // A new breach was detected!
+     const sampleBreaches = verifyAccount(account)
     if (sampleBreaches.length > 0) {
       return {
         success: true,
@@ -36,6 +36,22 @@ async function login(email, password) {
       success: false,
       message: "The username or password you entered is invalid."
     };
+  }
+}
+
+
+async function verifyAccount(account) {
+  
+  const url = "https://hackcheck.woventeams.com/api/v4/breachedaccount/#{account}";
+  try {
+    const response = await fetch(url);
+
+    const json = await response.json();
+    console.log(json);
+    
+    const results = json.filter((json) => json["IsSensitive"] == false && json["DataClasses"].includes('Passwords') && json["AddedDate"] < account)
+  } catch (error) {
+    console.error(error.message);
   }
 }
 
