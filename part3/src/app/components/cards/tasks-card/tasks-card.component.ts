@@ -5,4 +5,6 @@ import { Component } from "@angular/core";
   styleUrls: ["./tasks-card.component.scss"],
   templateUrl: "./tasks-card.component.html"
 })
-export class TasksCard {}
+export class TasksCard {
+  suggestPasswordChange()
+}
