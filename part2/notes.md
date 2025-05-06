@@ -1,0 +1,5 @@
+- useState to store data, setData
+- Fetch('https://hackcheck.woventeams.com/api/v4/breachedaccount/{account}') to check if has been breached
+- If you replace {account} with test@example.com, you get json data that you would want to grab the data using specific properties that you want to include.
+- With the safe example, the api will return a 404. Handle this in the if condition that checks if (!response.ok). Nest another if condition to check if the response.status === 404 and give a message/alert such as 'No account breaches found'. Otherwise, throw error with the response status.
+- For breached, map through data and grab the specific properties and values (e.g., item.Name, item.Domain, item.BreachDate, and item.AddedDate) to be displayed.

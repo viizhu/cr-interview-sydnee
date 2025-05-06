@@ -12,11 +12,25 @@ function authenticate(email, password) {
   }
 }
 
+async function check(email) {
+  try {
+    const response = await fetch(`https://hackcheck.woventeams.com/api/v4/breachedaccount/${email}`);
+    if (!response.ok){
+      throw new Error(`Response status: ${response.status}`)
+    }
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 // The object returned from this function will be displayed in
 // a modal upon clicking submit on the login form.
 
 async function login(email, password) {
   const account = authenticate(email, password);
+  const checkAccount = check(email); //
   if (account) {
     // A new breach was detected!
     if (sampleBreaches.length > 0) {
@@ -25,7 +39,8 @@ async function login(email, password) {
         meta: {
           suggestPasswordChange: true,
           // hardcoded for now...
-          breachedAccounts: sampleBreaches
+           breachedAccounts: sampleBreaches
+
         }
       };
     } else {
