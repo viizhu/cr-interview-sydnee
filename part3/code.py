@@ -10,7 +10,21 @@ class Authorization:
 # @example: listPermissions(1) ➡ ["View Orders", "Block User Account"] (purchased widgets not included since it is not active)
   def list_permissions(self, user_id):
     # TODO: fill this out!
-    return
+    # Iterate through users, access user["id"] and if it's equal to user_id
+      # Iterate through user["roles"] and check if that role in permissions is active
+      # Append to result 
+      
+    result = []
+    for user in self.users:
+      if user["id"] == user_id:
+        for role in user["roles"]: 
+          for item in self.permissions:
+            if item["role"] == role and item["active"] == True:
+              result.append(self.permissions["name"])
+              print(result)
+   
+    return result
+
 
 # @rtype: boolean value
 # @returns: true or false based on if the user with the corresponding user_id has the role that corresponds with the specific permission_name and that particular permission is active
@@ -19,4 +33,8 @@ class Authorization:
 # checkPermitted("scooters near me", 1) ➡ false
   def check_permitted(self, permission_name, user_id):
     # TODO: fill this out!
+    # Iterate through users, access user["id"] and see if it's equal to user_id
+    for user in self.users:
+      if user["id"] == user_id:
+        for permission in 
     return
