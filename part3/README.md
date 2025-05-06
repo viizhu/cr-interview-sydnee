@@ -1,80 +1,21 @@
-# Change Password Alert
-## Overview
-We recently integrated with an API that lets us know when email addresses have been involved in a password breach on other sites. Now that we know the recent breaches the user has been involved in, we want to show an alert on their Dashboard if they have been involved in any.
+# Managing User Permissions
+## Background
+Our app recently started supporting multiple types of users. As a result, we need to add the concept of role-based access control. When users log in, they should only be able to view certain pages according to their roles.
 
-## Tasks
-Add a new card to the Dashboard page with the title "Alerts". When a user logs in, we want to display the Alerts card with different content depending on whether they have been involved in any breaches (suggestPasswordChange value is set in their auth metadata).
+We have already laid out the framework for this change on the database end by adding a roles property to our user model and creating a permissions table that contains all the roles we want to give the users and their associated permissions.
 
-### Alerts Card (No breaches)
-If the user has no breaches (suggestPasswordChange is not set) make the Alerts card background color **white** and show the following message inside the card body:
+[Here is a graphic to help visualize the two data structures, Users and Permissions](https://woven-scenario-assets.s3.amazonaws.com/managing_user_permssions_graphic.png)
 
-```
-No alerts
-```
 
-### Alerts Card (Has breaches)
-If a user has been involved in any breaches we want to make the background color of the Alerts card **yellow** and include the following information in the card body:
+*Note: This is a graphic to represent the two data structures using pseudocode and not written within the grammar/naming conventions of any one programming language*
 
-```
-Your email was involved in a breach on the following sites:
+We have determined the next step in the process is to build two functions that will give us the ability to check all the permissions associated with each role and check whether a user has specific permission.
 
-- <Breach added date> – <Breach name>
-- ...
+## Testing
+The automated tests we provide only cover a few key cases, so you should plan to add some of your own tests or modify the existing ones to ensure that your solution handles any edge cases. You should be able to follow the existing patterns for naming and constructing tests to add your own.
 
-Although your information on our site is safe, we
-recommend you change your password in case your AppCo
-account shares a password with any of the sites above.
-
-[button to change password]  [button to dismiss]
-```
-(The breaches to display are in `breachedAccounts` in the auth metadata.)
-
-### Hook up dismiss button
-If the alert contains a dismiss button, the button should "dismiss" the alert for the rest of the user's session. (Change the Alerts card to the No Breaches version) You can do this by clearing suggestPasswordChange from the auth metadata.
-
-Here is a wireframe illustrating the flow for the requested changes
-
-https://woven-scenario-assets.s3.amazonaws.com/Change_Password_Alert_wireframe.png
-
-Notes:
-
-* You don't have to make a pixel-perfect copy of the wireframe above, as long as the content and functionality are present, that is what we're most interested in.
-* The Change Password button does not need to have any functionality
-
-----
-
-## Helpful Information
-**Auth object**
-
-The auth object which was mentioned several times above is created in the `handleSubmit` method in `src/app/components/login/login.component.ts`.
-
-**Test users**
-
-You can use the following accounts to test, which are located in `src/app/components/login/login.component.ts`. The safe user is hardcoded to return no breaches, and the unsafe user is hardcoded to return 3 breaches.
-
-**User with no breaches ("Safe User")**
-* Email: safe@example.com
-* Password: pw
-
-**User with breaches ("Unsafe User")**
-* Email: test@example.com
-* Password: pw
-
----
-
-### Other notes
-**No login logic changes needed**
-
-You won't need to change login logic or hit an API in this challenge. Instead, focus on the front end / user interface changes needed to implement the feature.
-
-**Use Your Browser's Javascript Console**
-
-The debugger won't work, but you'll be able to see console output from the "Web Preview".
-
-**Hot Reloading**
-
-You may disable hot reloading by clicking the green Auto switch on the Web Preview.
-
-**Web preview errors?**
-
-If you see Web Preview 404 errors, please disable any content blockers you may have running and try reloading the page.
+## Notes
+* It’s more important for the return value to be correct than for the algorithm to be highly optimized.
+* You should not change the name, arguments, or return types of the provided functions since our test cases depend on those not changing.
+* The data in the internal tests will be different from the data we gave in the examples, so do not hardcode your solutions to the examples.
+* Feel free to add additional functions beyond those provided if they improve the structure of your solution.
