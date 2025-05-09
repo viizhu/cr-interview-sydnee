@@ -7,10 +7,11 @@ import { AppComponent } from "./app.component";
 import { LoginComponent } from "./components/login/login.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 
+import { AlertsCard } from "./components/cards";
 import { TasksCard } from "./components/cards";
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, DashboardComponent, TasksCard],
+  declarations: [AppComponent, LoginComponent, DashboardComponent, AlertsCard, TasksCard],
   imports: [FormsModule, BrowserModule],
   providers: [],
   bootstrap: [AppComponent]
