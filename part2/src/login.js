@@ -1,7 +1,8 @@
 import {
   users as sampleUsers,
-  breaches as sampleBreaches,
 } from "./sample";
+
+
 
 function authenticate(email, password) {
   const account = sampleUsers.find(a => a.email === email);
@@ -19,13 +20,13 @@ async function login(email, password) {
   const account = authenticate(email, password);
   if (account) {
     // A new breach was detected!
-    if (sampleBreaches.length > 0) {
+    if (breaches.length > 0) {
       return {
         success: true,
         meta: {
           suggestPasswordChange: true,
           // hardcoded for now...
-          breachedAccounts: sampleBreaches
+          breachedAccounts: breaches
         }
       };
     } else {
